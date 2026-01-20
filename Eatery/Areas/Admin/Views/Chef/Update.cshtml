@@ -1,0 +1,49 @@
+﻿@model ChefUpdateVM
+
+<div class="container">
+	<div class="row">
+
+		<form method="post" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly"></div>
+			<div><h2>Update The Chef</h2></div>
+
+			<div class="form-group">
+				<label asp-for="Fullname">Fullname</label>
+				<input asp-for="Fullname" class="form-control" placeholder="Fullname">
+				<span asp-validation-for="Fullname" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="Description">Description</label>
+				<input asp-for="Description" class="form-control" placeholder="Description">
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="Image">Image</label>
+				<input asp-for="Image" class="form-control">
+				<span asp-validation-for="Image" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="CategoryId">Image</label>
+				<select asp-for="CategoryId">
+					<option selected disabled value="">--Select Category--</option>
+					@foreach (Category category in ViewBag.Categories)
+					{
+						<option value="@category.Id">@category.Name</option>
+					}
+				</select>
+				<span asp-validation-for="CategoryId" class="text-danger"></span>
+			</div>
+
+			<button type="submit" class="btn btn-primary">Update</button>
+			<a asp-action="Index" class="btn btn-danger">Cancel</a>
+		</form>
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial"></partial>
+}
+
