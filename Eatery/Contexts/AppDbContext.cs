@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Eatery.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace Eatery.Contexts
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
@@ -15,6 +17,8 @@ namespace Eatery.Contexts
             base.OnModelCreating(modelBuilder);
         }
 
+        public DbSet<Chef> Chefs { get; set; }
+        public DbSet<Category> Categories { get; set; }
         
     }
 }
