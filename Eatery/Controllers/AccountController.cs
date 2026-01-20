@@ -26,7 +26,7 @@ namespace Eatery.Controllers
         }
 
 
-        /*[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterVM vm)
         {
             if (!ModelState.IsValid)
@@ -49,8 +49,64 @@ namespace Eatery.Controllers
                 return View(vm);
             }
 
+            await _userManager.AddToRoleAsync(user, "Member");
 
-        }*/
+            await _signInManager.SignInAsync(user, false);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var user = await _userManager.FindByEmailAsync(vm.Email);
+            if(user is null)
+            {
+                ModelState.AddModelError("", "Email or Password is wrong");
+                return View(vm);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(user, vm.Password, false, false);
+
+            if(!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Email or Password is wrong");
+                return View(vm);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Login));
+        }
+
+        public async Task<IActionResult> CreateRoles()
+        {
+            await _roleManager.CreateAsync(new IdentityRole()
+            {
+                Name = "Admin"
+            });
+            await _roleManager.CreateAsync(new IdentityRole()
+            {
+                Name = "Member"
+            });
+
+
+            return Ok("Role was created");
+        }
+
 
     }
 }

@@ -58,6 +58,18 @@
             <!-- MENU LINKS -->
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-nav-first">
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <li><a href="#" class="smoothScroll">@User.Identity.Name</a></li>
+                        <li><a asp-action="Logout" asp-controller="Account" class="smoothScroll">Logout</a></li>
+                        
+                    }
+                    else{
+
+                    <li><a asp-action="Login" asp-controller="Account" class="smoothScroll">Login</a></li>
+                    <li><a asp-action="Register" asp-controller="Account" class="smoothScroll">Register</a></li>
+
+                    }
                     <li><a href="#home" class="smoothScroll">Home</a></li>
                     <li><a href="#about" class="smoothScroll">About</a></li>
                     <li><a href="#team" class="smoothScroll">Chef</a></li>

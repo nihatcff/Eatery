@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Eatery.Areas.Admin.Controllers;
 [Area("Admin")]
-[Authorize]
+//[Authorize(Roles ="Admin")]
 public class ChefController : Controller
 {
     private readonly AppDbContext _context;
