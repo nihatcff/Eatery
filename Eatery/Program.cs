@@ -1,17 +1,26 @@
 using Eatery.Contexts;
+using Eatery.Helpers;
 using Eatery.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Eatery
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<DbContextInitializer>();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+            });
 
             builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
             {
@@ -20,13 +29,11 @@ namespace Eatery
                 options.Password.RequiredLength = 3;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
-            });
-
             var app = builder.Build();
 
+            var scope = app.Services.CreateScope();
+            var contextInitializer = scope.ServiceProvider.GetRequiredService<DbContextInitializer>();
+            await contextInitializer.InitializeDatabaseAsync();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

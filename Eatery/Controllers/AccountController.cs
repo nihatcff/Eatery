@@ -10,13 +10,11 @@ namespace Eatery.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<IdentityRole> roleManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
         }
 
         [HttpGet]
@@ -91,22 +89,6 @@ namespace Eatery.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(Login));
         }
-
-        public async Task<IActionResult> CreateRoles()
-        {
-            await _roleManager.CreateAsync(new IdentityRole()
-            {
-                Name = "Admin"
-            });
-            await _roleManager.CreateAsync(new IdentityRole()
-            {
-                Name = "Member"
-            });
-
-
-            return Ok("Role was created");
-        }
-
 
     }
 }
